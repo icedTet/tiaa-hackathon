@@ -36,8 +36,8 @@ export default function Register() {
     setError("");
   }, [firstName, lastName, username, email, password, code]);
   const [signupStage, setSignupStage] = useState(0);
-  // const [user, setUser] = useState(null as SelfUser | null);
-  const user = useSelf();
+  const [user, setUser] = useState(null as SelfUser | null);
+  // const user = useSelf();
   const login = async () => {
     setLoggingIn(true);
     const res = await fetcher(`${apiDomain}/signup`, {
