@@ -16,3 +16,13 @@ export type FriendRequest = {
   createdAt: Date;
   message: string;
 };
+export type FriendBook = {
+  _id?: string;
+  userID: string;
+  friends: FriendConnection[];
+  users?: User[];
+};
+export type FriendConnection = {
+  userID: string;
+  friendsSince: number;
+};

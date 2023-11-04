@@ -1,5 +1,6 @@
 import { RESTHandler, RESTMethods } from "../../../server";
 import { FriendsManager } from "../../../utils/handlers/FriendsManager";
+import { UserManager } from "../../../utils/handlers/UserManager";
 
 export const getFriends = {
   path: "/users/:userID/friends",
@@ -13,8 +14,13 @@ export const getFriends = {
       userID = user._id!;
     }
     const friends = await FriendsManager.getFriends(userID);
-    if (!friends) return res.status(200).json({ userID: userID, friends: [] });
-    res.send(friends);
+    const users = await UserManager.getUsers(
+      friends?.friends.map((friend) => friend.userID) || []
+    ).then((users) => (users ? users.map(UserManager.cleanUser) : null));
+
+    if (!friends)
+      return res.status(200).json({ userID: userID, friends: [], users: [] });
+    res.send({...friends,users});
   },
 } as RESTHandler;
 export default getFriends;
