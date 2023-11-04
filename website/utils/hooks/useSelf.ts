@@ -25,12 +25,22 @@ export class SelfUserManager extends EventEmitter {
     }
   }
   async getUser(fresh?: boolean) {
+    if (globalThis?.window?.localStorage?.getItem("token") === null) {
+      this.user = null;
+      return null;
+    }
     if (this.user && !fresh) return this.user;
     if (this.userFetchPromise) return this.userFetchPromise;
     this.userFetchPromise = fetcher(`${apiDomain}/users/@me`).then((res) =>
       res.json()
     );
     const user = await this.userFetchPromise;
+    if (!user) {
+      this.userFetchPromise = null;
+      this.user = null;
+      return null;
+    }
+
     this.user = user;
     this.userFetchPromise = null;
     this.cached = true;

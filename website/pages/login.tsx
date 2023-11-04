@@ -84,8 +84,9 @@ export default function Home() {
           <div
             className={`flex flex-col items-center justify-center w-full grow`}
           >
-            <div className={`flex flex-col gap-4 w-full`}>
-              {self && (
+            {self && (
+              <div className={`flex flex-col gap-4 w-full`}>
+                {/* {JSON.stringify(self)} */}
                 <div className={`flex flex-col gap-4 w-full `}>
                   {/* <span
                   className={`text-sm font-medium font-montserrat text-gray-100/20`}
@@ -114,21 +115,22 @@ export default function Home() {
                     <ChevronRightIcon className={`w-6 h-6 text-gray-100/20`} />
                   </div>
                 </div>
-              )}
-              <div className={`flex flex-row items-center gap-4`}>
-                <div
-                  className={`flex-grow border border-gray-100/20 rounded`}
-                ></div>
-                <span
-                  className={`text-sm font-medium font-wsans text-gray-100/40`}
-                >
-                  or
-                </span>
-                <div
-                  className={`flex-grow border border-gray-100/20 rounded`}
-                ></div>
+
+                <div className={`flex flex-row items-center gap-4`}>
+                  <div
+                    className={`flex-grow border border-gray-100/20 rounded`}
+                  ></div>
+                  <span
+                    className={`text-sm font-medium font-wsans text-gray-100/40`}
+                  >
+                    or
+                  </span>
+                  <div
+                    className={`flex-grow border border-gray-100/20 rounded`}
+                  ></div>
+                </div>
               </div>
-            </div>
+            )}
             <div
               className={`flex flex-col ${self ? `gap-20` : `gap-32`} w-full`}
             >
