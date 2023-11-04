@@ -85,38 +85,36 @@ export default function Home() {
             className={`flex flex-col items-center justify-center w-full grow`}
           >
             <div className={`flex flex-col gap-4 w-full`}>
-              <div
-                className={`flex flex-col gap-4 w-full `}
-              >
-                {/* <span
+              {self && (
+                <div className={`flex flex-col gap-4 w-full `}>
+                  {/* <span
                   className={`text-sm font-medium font-montserrat text-gray-100/20`}
                 >
                   You&apos;re already logged into
                 </span> */}
-                <div
-                  className={`flex flex-row gap-4 p-4 border rounded-2xl items-center border-gray-100/20 drop-shadow-md shadow-xl bg-gray-850 w-full cursor-pointer hover:bg-gray-800 transition-all`}
-                >
-                  {self && (
+                  <div
+                    className={`flex flex-row gap-4 p-4 border rounded-2xl items-center border-gray-100/20 drop-shadow-md shadow-xl bg-gray-850 w-full cursor-pointer hover:bg-gray-800 transition-all`}
+                  >
                     <UserProfile user={self} className="w-10 h-10 text-xs" />
-                  )}
-                  <div className={`flex flex-col gap-0`}>
-                    <span className={`text-gray-100/20 text-sm font-medium`}>
-                      Continue as
-                    </span>
-                    <span
-                      className={`text-white text-lg font-bold font-montserrat`}
-                    >
-                      {self?.firstName} {self?.lastName}
-                    </span>
+                    <div className={`flex flex-col gap-0`}>
+                      <span className={`text-gray-100/20 text-sm font-medium`}>
+                        Continue as
+                      </span>
+                      <span
+                        className={`text-white text-lg font-bold font-montserrat`}
+                      >
+                        {self?.firstName} {self?.lastName}
+                      </span>
 
-                    {/* <span className={`text-gray-400 text-sm font-wsans`}>
+                      {/* <span className={`text-gray-400 text-sm font-wsans`}>
                   {user?.email}
                 </span> */}
+                    </div>
+                    <div className={`flex-grow`}></div>
+                    <ChevronRightIcon className={`w-6 h-6 text-gray-100/20`} />
                   </div>
-                  <div className={`flex-grow`}></div>
-                  <ChevronRightIcon className={`w-6 h-6 text-gray-100/20`} />
                 </div>
-              </div>
+              )}
               <div className={`flex flex-row items-center gap-4`}>
                 <div
                   className={`flex-grow border border-gray-100/20 rounded`}
