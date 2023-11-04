@@ -70,6 +70,7 @@ export const FriendsPage = () => {
                 friendRequests?.friendRequestsReceived?.map((request) => (
                   <div
                     className={`w-[50ch] aspect-video p-8 flex flex-col gap-4 bg-gray-850 rounded-3xl relative border border-gray-100/5 shadow-lg drop-shadow-md`}
+                    key={request._id}
                   >
                     <div className={`flex flex-row gap-4 items-center`}>
                       <UserProfile
@@ -139,6 +140,7 @@ export const FriendsPage = () => {
                 friendRequests?.friendRequestsSent?.map((request) => (
                   <div
                     className={`w-[50ch] aspect-video p-8 flex flex-col gap-4 bg-gray-850 rounded-3xl relative border border-gray-100/5 shadow-lg drop-shadow-md`}
+                    key={request._id}
                   >
                     <div className={`flex flex-row gap-4 items-center`}>
                       <UserProfile
@@ -200,7 +202,7 @@ export const FriendsPage = () => {
           <div className={`flex flex-col gap-4`}>
             {!!search?.length &&
               search?.map((user) => (
-                <FriendSearchResult user={user} onAdd={setFriendRequests} />
+                <FriendSearchResult user={user} onAdd={setFriendRequests} key={user._id} />
               ))}
             {!search?.length && searchTerm && (
               <span className={`text-gray-400`}>
