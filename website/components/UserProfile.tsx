@@ -63,17 +63,18 @@ export const UserProfile = (props: {
   user?: User;
   pfp?: string;
   className: string;
+  profileClassName?: string;
   width?: number;
   height?: number;
 }) => {
-  const { user, className, pfp } = props;
+  const { user, className, pfp ,profileClassName} = props;
   if (user?.pfp) {
     return (
       <div className={`relative ${className}`}>
         <Image
           src={pfp ?? user.pfp}
           alt="Profile Picture"
-          className={className}
+          className={`${className} ${profileClassName}`}
           width={props.width}
           height={props.height}
           // if no width/height, use 100% of parent

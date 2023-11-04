@@ -14,9 +14,7 @@ import {
     validationCode?: string;
   }
   
-  const baseUrl = process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : '';
+  const baseUrl = 'https://tiaa.tet.moe';
   
   export const VerifyIdentityEmail = ({
     validationCode = '144833',
@@ -26,15 +24,15 @@ import {
       <Body style={main}>
         <Container style={container}>
           <Img
-            src={`${baseUrl}/static/plaid-logo.png`}
-            width="212"
-            height="88"
-            alt="Plaid"
+            src={`${baseUrl}/logo.png`}
+            width="128"
+            height="128"
+            alt="Finapp Logo"
             style={logo}
           />
           <Text style={tertiary}>Verify Your Identity</Text>
           <Heading style={secondary}>
-            Enter the following code to finish signing up for Karrd.
+            Enter the following code to finish signing up for Finapp.
           </Heading>
           <Section style={codeContainer}>
             <Text style={code}>{validationCode}</Text>

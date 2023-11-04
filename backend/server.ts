@@ -128,7 +128,7 @@ const importAllHandlers = async (path: string, failedImports: string[]) => {
 MongoConnection.connect().then((db) => {
   console.log("Established Mongo Connection...");
   globalThis.MongoDB = db;
-  db.db("Users").collection("unverifiedUser").deleteMany({});
+  // db.db("Users").collection("unverifiedUser").deleteMany({});
   server.use(
     cors({
       exposedHeaders: ["filename", "updatedat"],
