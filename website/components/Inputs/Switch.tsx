@@ -1,6 +1,4 @@
 import { Switch as Switchy } from '@headlessui/react'
-import { usePrimaryCommunity } from '../../utils/hooks/community/usePrimaryCommunity'
-import { useUserColors } from '../../utils/hooks/customization/colors'
 export const Switch = (props: {
   label: string
   checked: boolean
@@ -10,8 +8,6 @@ export const Switch = (props: {
   className?: string
 }) => {
   const { label, checked, onChange, experimental, disabled, className } = props
-  const community = usePrimaryCommunity()
-  const color = useUserColors()
 
   return (
     <Switchy.Group>
@@ -38,7 +34,7 @@ export const Switch = (props: {
           disabled={disabled}
           className={` ${
             checked
-              ? `bg-${color || `primary-500`} bg-opacity-80`
+              ? `bg-indigo-500 bg-opacity-80`
               : 'bg-gray-300 dark:bg-gray-700'
           } relative inline-flex items-center h-6 rounded-full w-11 transition-colors focus:outline-none shadow-inner`}
         >

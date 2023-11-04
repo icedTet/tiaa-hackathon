@@ -102,7 +102,7 @@ export const SelectMenu = (props: SelectMenuProps) => {
                             ? `text-white bg-purple-600/40`
                             : 'text-gray-200',
                           'cursor-default select-none relative py-4 pl-3 pr-9 transition-all text-sm',
-                          props.optionSpecificClasses
+                          props.optionSpecificClasses || ''
                         )
                       }
                       value={option}
