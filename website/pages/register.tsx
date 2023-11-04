@@ -297,7 +297,7 @@ export default function Register() {
                 router.push("/dashboard");
               }}
             >
-              Let's go!
+              Let&apos;s go!
             </button>
           </div>
         </motion.div>
