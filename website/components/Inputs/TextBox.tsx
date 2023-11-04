@@ -1,4 +1,4 @@
-import React, { ComponentProps, CSSProperties, useEffect, useState } from 'react'
+import React, { ComponentProps, CSSProperties, ReactNode, useEffect, useState } from 'react'
 interface TextBoxProps {
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void
   onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void
@@ -20,7 +20,7 @@ interface TextBoxProps {
   inputMode?: 'text' | 'search' | 'none' | 'tel' | 'url' | 'email' | 'numeric' | 'decimal' | undefined
   value?: string
   disabled?: boolean
-  icon?: (props: ComponentProps<any>) => JSX.Element
+  icon?: (props: ComponentProps<any>) => JSX.Element | ReactNode
   ringColor?: string
   label?: string
 }

@@ -1,12 +1,18 @@
 export type User = {
-  _id: string;
+  _id?: string;
   username: string;
   firstName: string;
   lastName: string;
-  name: string;
   pfp?: string;
 };
 
 export type SelfUser = User & {
   email: string;
+};
+export type FriendRequest = {
+  _id?: string;
+  senderID: string;
+  receiverID: string;
+  createdAt: Date;
+  message: string;
 };

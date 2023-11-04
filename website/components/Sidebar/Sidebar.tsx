@@ -24,10 +24,10 @@ export const Sidebar = () => {
     <div
       className={`${
         open ? "w-96" : "w-40"
-      }  h-screen bg-gray-900 p-8 shrink-0 transition-all duration-300`}
+      }  h-screen bg-gray-1000 p-8 shrink-0 transition-all duration-300`}
     >
       <div
-        className={`bg-gray-850 border border-gray-100/5 flex flex-col gap-8 h-full ${
+        className={`bg-gray-900 border border-gray-100/5 flex flex-col gap-8 h-full ${
           open ? "rounded-3xl p-8" : "rounded-xl p-2 py-6 items-center"
         } shadow-md transition-all duration-300`}
       >
@@ -119,7 +119,7 @@ export const Sidebar = () => {
         <div className="flex-grow" />
         <div
           className={`flex flex-row ${
-            open ? `p-4 rounded-3xl bg-gray-900` : `p-1 rounded-xl`
+            open ? `p-4 rounded-3xl bg-gray-850` : `p-1 rounded-xl`
           }  border border-gray-100/10 drop-shadow-lg`}
         >
           <UserProfile

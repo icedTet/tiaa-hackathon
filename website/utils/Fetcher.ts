@@ -44,10 +44,10 @@ export const fetcher = (
       },
     });
     const res = await fet;
-    if (res.status === 401) {
-      localStorage.removeItem("token");
-      window.location.href = "/login";
-    }
+    // if (res) {
+    //   localStorage.removeItem("token");
+    //   window.location.href = "/login";
+    // }
     resolve(res);
   });
 };

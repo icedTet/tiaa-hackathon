@@ -15,6 +15,17 @@ export class UserManager {
       _id: user._id.toString(),
     } as User;
   }
+  static async getUsers(userIDs: string[]) {
+    const users = await MongoDB?.db("Users")
+      .collection("user")
+      .find({ _id: { $in: userIDs.map((id) => new ObjectId(id)) } })
+      .toArray();
+    if (!users) return null;
+    return users.map((user) => ({
+      ...user,
+      _id: user._id.toString(),
+    })) as User[];
+  }
   static async getUserByUsername(username: string) {
     const user = await MongoDB?.db("Users")
       .collection("user")
@@ -27,6 +38,7 @@ export class UserManager {
   }
   static cleanUser(user: RawUser | User) {
     return {
+      _id: user._id?.toString(),
       username: user.username,
       firstName: user.firstName,
       lastName: user.lastName,
@@ -44,6 +56,23 @@ export class UserManager {
       ...user,
       _id: user._id.toString(),
     } as User;
+  }
+  static async userSearch(query: string, limit?: number) {
+    const users = await MongoDB?.db("Users")
+      .collection("user")
+      .find({
+        $or: [
+          { username: { $regex: query, $options: "i" } },
+          { name: { $regex: query, $options: "i" } },
+        ],
+      })
+      .limit(limit || 10)
+      .toArray();
+    if (!users) return null;
+    return users.map((user) => ({
+      ...user,
+      _id: user._id.toString(),
+    })) as User[];
   }
 }
 
