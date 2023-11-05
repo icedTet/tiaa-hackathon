@@ -1,5 +1,8 @@
 import { readFile, readdir } from "fs/promises";
 import { StockTimeSerie } from "../../types";
+import { stockGameDates } from "../../dates";
+import { readFileSync } from "fs";
+import { performance } from "perf_hooks";
 
 export class StockDatabase {
   private static instance: StockDatabase;
@@ -21,11 +24,20 @@ export class StockDatabase {
     const baseDir = "./cleanedStockData";
     const stockFiles = await readdir(baseDir);
     const stockJSONPaths = stockFiles.map((x) => `${baseDir}/${x}`);
-    await Promise.all(stockJSONPaths.map((x) => this.addStock(x)));
+    for (const stockJSONPath of stockJSONPaths) {
+      if (stockJSONPath.endsWith(".json")) await this.addStock(stockJSONPath);
+    }
+
+    // await Promise.all(
+    //   stockJSONPaths.map((x) => {
+    //     if (x.endsWith(".json")) return this.addStock(x);
+    //   })
+    // );
     this.ready = true;
   }
   async addStock(stockJSONPath: string) {
     const stockDataFile = await readFile(stockJSONPath, "utf-8");
+    console.log(`Loading stock ${stockJSONPath}`);
     const stockData = JSON.parse(stockDataFile);
     const stockName = stockJSONPath.split("/").pop()!.split(".")[0];
     const stock = new Stock(stockName);
@@ -35,25 +47,80 @@ export class StockDatabase {
     this.stocks.set(stockName, stock);
   }
 
-  getStocks() {
+  async getStocks() {
+    if (!this.ready) await this.waitForReady();
     return this.stocks;
   }
-  getStock(stockName: string) {
+  async getStock(stockName: string) {
+    if (!this.ready) await this.waitForReady();
     return this.stocks.get(stockName);
   }
-  getCurrentStockMarketPrice(stockName: string, day: string) {
-    const stock = this.getStock(stockName);
+  async getCurrentStockMarketPrice(stockName: string, day: string) {
+    if (!this.ready) await this.waitForReady();
+    const stock = await this.getStock(stockName);
     if (!stock) return null;
     const timeSerie = stock.getTimeSerie(day);
     if (!timeSerie) return null;
     return timeSerie.close;
   }
+  async waitForReady() {
+    return new Promise((resolve) => {
+      if (this.ready) resolve(true);
+      else {
+        const interval = setInterval(() => {
+          if (this.ready) {
+            clearInterval(interval);
+            resolve(true);
+          }
+        }, 100);
+      }
+    });
+  }
+  async getCurrentMarketPrices(day: string) {
+    if (!this.ready) await this.waitForReady();
+    const stockPrices = new Map<string, number>();
+    let perf = performance.now();
+    const dayInd = stockGameDates.findIndex((date) => date === day);
+    for (const [stockName, stock] of this.stocks) {
+      const price = stock.timeSeries[dayInd]?.close;
+      if (price) stockPrices.set(stockName, price);
+      console.log(
+        `Took ${
+          performance.now() - perf
+        }ms to get stock prices for ${stockName}`
+      );
+      perf = performance.now();
+    }
+    return stockPrices;
+  }
+  async getStockMarketPricesUpTo(day: string) {
+    if (!this.ready) await this.waitForReady();
+    const endDateIndex = stockGameDates.findIndex((date) => date === day);
+    const stockMarket = new Map<string, Map<string, number>>();
+
+    for (let i = 0; i <= endDateIndex; i++) {
+      const date = stockGameDates[i];
+      const stockPrices = new Map<string, number>();
+      let perf = performance.now();
+      for (const [stockName, stock] of this.stocks) {
+        const price = stock.timeSeries[i]?.close;
+        if (price) stockPrices.set(stockName, price);
+      }
+      console.log(
+        `Took ${performance.now() - perf}ms to get stock prices for ${date}`
+      );
+      perf = performance.now();
+      stockMarket.set(date, stockPrices);
+      //   const stockPrices = await this.getCurrentMarketPrices(date);
+      //   stockMarket.set(date, stockPrices);
+    }
+    return stockMarket;
+  }
 }
 
-
 class Stock {
-  private name: string;
-  private timeSeries: StockTimeSerie[];
+  name: string;
+  timeSeries: StockTimeSerie[];
 
   constructor(name: string) {
     this.name = name;

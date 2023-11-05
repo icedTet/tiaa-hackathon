@@ -3,7 +3,10 @@ import { StockDatabase } from "./StockDatabase";
 import { stockGameDates } from "../../dates";
 export class StockGame {
   static dateToSimulationTime(date: Date) {
-    return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+    return `${date.getFullYear()}-${`${date.getMonth()+1}`.padStart(
+      2,
+      "0"
+    )}-${`${date.getUTCDate()}`.padStart(2, "0")}`;
   }
   static simulationTimeToDate(simulationTime: string) {
     const [year, month, day] = simulationTime.split("-").map(Number);
@@ -45,7 +48,7 @@ export class StockGame {
       _id: new ObjectId(),
       userID,
       currentDay: new Date(stockGameDates[0]),
-      nextAdvanceDay: 0,
+      nextAdvanceDay: Date.now() + 1000 * 60 * 60 * 23,
       advancesLeft: 34,
     } as StockGameUserData;
     await MongoDB?.db("StockGame")
@@ -76,10 +79,11 @@ export class StockGame {
       userGameData.currentDay
     );
     if (!currentPortfolio) throw new Error("No portfolio");
-    const stockPrice = StockDatabase.getInstance().getCurrentStockMarketPrice(
-      stockID,
-      StockGame.dateToSimulationTime(userGameData.currentDay)
-    );
+    const stockPrice =
+      await StockDatabase.getInstance().getCurrentStockMarketPrice(
+        stockID,
+        StockGame.dateToSimulationTime(userGameData.currentDay)
+      );
     if (!stockPrice) throw new Error("No stock price");
 
     const totalCost = stockPrice * amount;
@@ -118,10 +122,11 @@ export class StockGame {
       userGameData.currentDay
     );
     if (!currentPortfolio) throw new Error("No portfolio");
-    const stockPrice = StockDatabase.getInstance().getCurrentStockMarketPrice(
-      stockID,
-      StockGame.dateToSimulationTime(userGameData.currentDay)
-    );
+    const stockPrice =
+      await StockDatabase.getInstance().getCurrentStockMarketPrice(
+        stockID,
+        StockGame.dateToSimulationTime(userGameData.currentDay)
+      );
     if (!stockPrice) throw new Error("No stock price");
 
     const totalCost = stockPrice * amount;
