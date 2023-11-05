@@ -1,16 +1,16 @@
 import { ObjectId } from "mongodb";
 import { StockDatabase } from "./StockDatabase";
-import { stockGameDates } from "../../dates";
+import stockGameDates  from "../../dates";
 export class StockGame {
   static dateToSimulationTime(date: Date) {
-    return `${date.getFullYear()}-${`${date.getMonth()+1}`.padStart(
+    return `${date.getUTCFullYear()}-${`${date.getUTCMonth() + 1}`.padStart(
       2,
       "0"
     )}-${`${date.getUTCDate()}`.padStart(2, "0")}`;
   }
   static simulationTimeToDate(simulationTime: string) {
     const [year, month, day] = simulationTime.split("-").map(Number);
-    return new Date(year, month, day);
+    return new Date(year, month - 1, day);
   }
   static async getCurrentPortfolio(userID: string) {
     const userGameData = await this.getUserGameData(userID);
@@ -19,6 +19,16 @@ export class StockGame {
       userGameData.currentDay
     );
     return portfolio;
+  }
+  static async getPortfolioTimeSeries(userID: string) {
+    const userGameData = await this.getUserGameData(userID);
+    const portfolio = await MongoDB?.db("StockGame")
+      .collection("portfolio")
+      .find({
+        userID,
+      })
+      .toArray();
+    return portfolio as StockGameUserTimeStamp[];
   }
   static async getPortfolioAtDate(userID: string, date: Date) {
     // const userGameData = await this.getUserGameData(userID);
@@ -51,15 +61,19 @@ export class StockGame {
       nextAdvanceDay: Date.now() + 1000 * 60 * 60 * 23,
       advancesLeft: 34,
     } as StockGameUserData;
-    await MongoDB?.db("StockGame")
-      .collection("gameData")
-      .insertOne(gameData as any);
+    await MongoDB?.db("StockGame").collection("gameData").updateOne(
+      { userID },
+      {
+        $set: gameData,
+      },
+      { upsert: true }
+    );
     const initialPortfolio = {
       _id: new ObjectId(),
       userID,
       simulationTime: new Date(stockGameDates[0]),
       stocks: [],
-      money: 10000,
+      money: 100000,
     } as StockGameUserTimeStamp;
     await MongoDB?.db("StockGame")
       .collection("portfolio")
@@ -130,10 +144,33 @@ export class StockGame {
     if (!stockPrice) throw new Error("No stock price");
 
     const totalCost = stockPrice * amount;
+    const stocks = currentPortfolio?.stocks
+      .filter((stock) => stock.stockID === stockID)
+      .sort((a, b) => a.boughtAt - b.boughtAt);
+    const otherStocks = currentPortfolio?.stocks
+      .filter((stock) => stock.stockID !== stockID)
+      .sort((a, b) => a.boughtAt - b.boughtAt);
+    // remove stocks from the oldest to the newest
+    let required = amount;
+    console.log("Current stocks", stocks);
+    while (required > 0) {
+      const stock = stocks?.shift();
+      if (!stock) throw new Error("Not enough stocks");
+      if (stock.amount > required) {
+        stock.amount -= required;
+        required = 0;
+        console.log("Pushing stock", stock);
+        stocks?.unshift(stock);
+      } else {
+        console.log("Removing stock", stock, stock.amount, required);
+        required -= stock.amount;
+      }
+    }
+    console.log("New stocks", stocks);
     const newPortfolio = {
       ...currentPortfolio,
       money: currentPortfolio.money + totalCost,
-      stocks: currentPortfolio.stocks.filter((x) => x.stockID !== stockID),
+      stocks: [...otherStocks!, ...stocks!] as StockGameStock[],
     };
     await MongoDB?.db("StockGame")
       .collection("portfolio")
@@ -168,10 +205,14 @@ export class StockGame {
     if (!newPortfolio) throw new Error("No portfolio");
     await MongoDB?.db("StockGame")
       .collection("portfolio")
-      .updateOne(
-        { userID, simulationTime: StockGame.simulationTimeToDate(nextDay) },
-        { $set: newPortfolio },
-        { upsert: true }
+      .insertOne(
+        {
+          ...newPortfolio,
+          _id: new ObjectId(),
+          userID,
+          simulationTime: StockGame.simulationTimeToDate(nextDay),
+        },
+        {}
       );
     await MongoDB?.db("StockGame")
       .collection("gameData")

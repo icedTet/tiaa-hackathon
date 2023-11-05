@@ -29,7 +29,7 @@ export const Modal = (props: {
         <div
           className={`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 ${
             !hideBG && `bg-gray-800 `
-          } p-2 rounded-3xl text-gray-100 ${className} ${
+          } rounded-3xl text-gray-100 ${className} ${
             visible ? `` : `hidden`
           }`}
         >
@@ -49,7 +49,7 @@ export const Modal = (props: {
           <div
             className={`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 ${
               !hideBG && `bg-gray-800`
-            } p-2 rounded-3xl text-gray-100 ${className}`}
+            } rounded-3xl text-gray-100 ${className}`}
           >
             {children}
           </div>

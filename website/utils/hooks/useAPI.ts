@@ -21,7 +21,7 @@ class APIManager {
     // if it is cached, return it
     const cached = APIMap.get(url);
     if (cached && cached.lastUpdate + cacheLife > Date.now()) {
-      return cached.value;
+      return cached.value.then((x) => x?.clone() || null);
     }
     // if it is fetching, wait for it
     if (APIManager.fetchingMap.has(url)) {
@@ -66,13 +66,36 @@ export const useAPIProp = <T>(options: {
   );
   const [error, setError] = useState(undefined as null | undefined | string);
   const user = useSelf();
-  const update = useCallback(async () => {
+  const update = useCallback(
+    async (fresh: boolean = false) => {
+      if (!APIPath) return null;
+      const resp = await APIManager.getInstance()
+        .cachedFetch(`${APIPath}`, requestInit, fresh ? 0 : cacheLife)
+        ?.catch((e) => {
+          console.error(e);
+          return null;
+          ``;
+        });
+      if (!resp) return setValue(null);
+      // if (!resp.ok) {
+      //   setError(`${resp.status} ${await resp.text()}`);
+      //   return setValue(null);
+      // }
+      console.log("useAPIProp", resp);
+      const json = await resp.json();
+      setValue(json);
+    },
+    [APIPath, requestInit]
+  );
+  const forceUpdate = useCallback(async () => {
     if (!APIPath) return null;
+    APIManager.fetchingMap.delete(APIPath);
     const resp = await APIManager.getInstance()
-      .cachedFetch(`${APIPath}`, requestInit)
+      .cachedFetch(`${APIPath}`, requestInit, 0)
       ?.catch((e) => {
         console.error(e);
-        return null;``
+        return null;
+        ``;
       });
     if (!resp) return setValue(null);
     // if (!resp.ok) {
@@ -83,12 +106,11 @@ export const useAPIProp = <T>(options: {
     const json = await resp.json();
     setValue(json);
   }, [APIPath, requestInit]);
-
   useEffect(() => {
     update();
     console.log("useAPIProp", APIPath, guildID, requestInit, cacheable, user);
   }, [APIPath, requestInit, user]);
-  return [value, update, error] as [
+  return [value, forceUpdate, error] as [
     null | undefined | T,
     () => Promise<void>,
     null | undefined | string

@@ -1,6 +1,6 @@
 import { readFile, readdir } from "fs/promises";
 import { StockTimeSerie } from "../../types";
-import { stockGameDates } from "../../dates";
+import stockGameDates  from "../../dates";
 import { readFileSync } from "fs";
 import { performance } from "perf_hooks";
 
@@ -96,6 +96,7 @@ export class StockDatabase {
   async getStockMarketPricesUpTo(day: string) {
     if (!this.ready) await this.waitForReady();
     const endDateIndex = stockGameDates.findIndex((date) => date === day);
+    console.log(`Getting stock market prices up to ${day}`, `Index: ${endDateIndex}`, `Date: ${stockGameDates[endDateIndex]}`, `Length: ${stockGameDates.length}`);
     const stockMarket = new Map<string, Map<string, number>>();
 
     for (let i = 0; i <= endDateIndex; i++) {

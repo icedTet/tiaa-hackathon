@@ -1,4 +1,4 @@
-import { stockGameDates } from "../../dates";
+import stockGameDates  from "../../dates";
 import { RESTHandler, RESTMethods } from "../../server";
 import { StockGame } from "../../utils/handlers/StockGame";
 

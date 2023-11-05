@@ -50,7 +50,7 @@ export const FriendsPage = () => {
   const [addFriend, setAddFriend] = useState(false);
   return (
     <SidebarLayout title={"Friends"}>
-      <div className={`flex flex-col gap-8 p-8 pl-0 grow`}>
+      <div className={`flex flex-col gap-8 p-8 pl-px grow`}>
         <div className="flex flex-col gap-4 items-start">
           <span className={`text-2xl font-bold font-montserrat`}>Friends</span>
           <span className={`text-gray-400`}>Find and manage your friends.</span>

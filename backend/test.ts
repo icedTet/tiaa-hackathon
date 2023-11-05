@@ -87,11 +87,15 @@ function cleanStockData(raw: rawStock[]) {
       continue;
     }
     if (
-      date[0] * 1000 + date[1] * 100 + date[2] >=
-      lastDate[0] * 1000 + lastDate[1] * 100 + lastDate[2] + 14
+      !lastDate[0] ||
+      new Date(date.join("-")).getTime() -
+        new Date(lastDate.join("-")).getTime() >=
+        1000 * 60 * 60 * 24 * 14
     ) {
       lastDate = date;
-    } else continue;
+    } else {
+      continue;
+    }
     dates.set(row.Date, (dates.get(row.Date) || 0) + 1);
     cleaned.push({
       date: row.Date,
@@ -125,6 +129,7 @@ function cleanStockData(raw: rawStock[]) {
       console.warn(`Earliest year is ${earliestYear} for ${stock}, skipping`);
       continue;
     }
+    // console.log(days);
     // console.log(stockData);
     fs.writeFileSync(`cleanedStockData/${stock}.json`, JSON.stringify(cleaned));
 
@@ -134,6 +139,7 @@ function cleanStockData(raw: rawStock[]) {
     `List of stocks with earliest year >= 1984: ${warningStocks.join(", ")}`
   );
   const dateArr = Array.from(dates.keys());
+  console.log(dates);
   writeFileSync("dates.json", JSON.stringify(dateArr));
   let max = 500;
   dates.forEach((x, y) => {
@@ -142,3 +148,39 @@ function cleanStockData(raw: rawStock[]) {
     }
   });
 })();
+
+// (async () => {
+//   const stockData = [] as any[];
+//   inputStream = fs.createReadStream(`dstock.csv`, "utf8");
+//   inputStream
+//     .pipe(
+//       new CsvReadableStream({
+//         parseNumbers: true,
+//         parseBooleans: true,
+//         trim: true,
+//       })
+//     )
+//     .on("header", (h) => {
+//       header = h;
+//     })
+//     .on("data", function (row) {
+//       if (!ready) {
+//         ready = true;
+//         return;
+//       }
+//       const formattedRow = {} as any;
+//       for (let i = 0; i < header.length; i++) {
+//         //@ts-ignore
+//         formattedRow[header[i]] = row[i];
+//       }
+//       stockData.push(formattedRow);
+//     })
+//     .on("end", function () {
+//       console.log(stockData);
+//       const finalJSON = {} as any;
+//       stockData.forEach((x) => {
+//         finalJSON[x["ticker"]] = x["name"];
+//       });
+//       writeFileSync("stockInfo2.json", JSON.stringify(finalJSON));
+//     });
+// })();

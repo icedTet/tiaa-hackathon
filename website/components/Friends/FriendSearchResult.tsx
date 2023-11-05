@@ -25,7 +25,7 @@ export const FriendSearchResult = (props: {
       });
       if (!resp.ok) {
         setAdded(true);
-        onAdd();
+        await onAdd();
       }
       //   props.onAdd();
     } catch (e) {

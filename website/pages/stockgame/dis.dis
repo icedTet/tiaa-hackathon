@@ -1,0 +1,91 @@
+<div className={`flex flex-row gap-8 items-start`}>
+            <div
+              className={`p-6 pr-8 flex flex-row gap-4 bg-gray-900 rounded-4xl border border-gray-100/5`}
+            >
+              <div
+                className={`w-16 h-16 bg-gray-850 flex flex-col items-center justify-center text-3xl rounded-3xl`}
+              >
+                🗓️
+              </div>
+              <div className={`flex flex-col gap-2 justify-center`}>
+                <span className={`text-gray-400 text-sm font-bold`}>
+                  Current Date
+                </span>
+                <span
+                  className={`text-xl font-bold font-montserrat ${
+                    !gameData?.currentDay && `blur-md`
+                  } transition-all duration-300`}
+                >
+                  {gameData?.currentDay
+                    ? dayjs(new Date(gameData?.currentDay!)).format(
+                        "MMMM D, YYYY"
+                      )
+                    : `Loading...`}
+                </span>
+              </div>
+            </div>
+            <div
+              className={`p-6 pr-8 flex flex-row gap-4 bg-gray-900 rounded-4xl border border-gray-100/5`}
+            >
+              <div
+                className={`w-16 h-16 bg-gray-850 flex flex-col items-center justify-center text-4xl rounded-3xl`}
+              >
+                💰
+              </div>
+              <div className={`flex flex-col gap-2 justify-center`}>
+                <span className={`text-gray-400 text-sm font-bold`}>
+                  Current Cash Balance
+                </span>
+                <span
+                  className={`text-xl font-bold font-montserrat
+                transition-all duration-300
+                    ${
+                      typeof currentPortfolio?.money === "undefined" &&
+                      `blur-md`
+                    }
+                `}
+                >
+                  ${currentPortfolio?.money ?? `Loading...`}
+                </span>
+              </div>
+            </div>
+          </div>
+          <div className={`grid grid-cols-12 w-full gap-4`}>
+            <div className={`flex flex-col gap-12 col-span-8`}>
+              {/* {JSON.stringify(portfolioValueData)} */}
+              <h1
+                className={`text-5xl font-medium font-montserrat ${
+                  currentPortfolio?.money ?? `blur-md`
+                }`}
+              >
+                {`$${currentPortfolio?.money.toFixed(2)}` ?? `Loading...`}
+              </h1>
+
+              <ReactApexChart
+                type="area"
+                height={500}
+                series={[
+                  {
+                    name: "Portfolio Value",
+                    data: portfolioValueData?.map((data) => data.y) ?? [],
+                  },
+                ]}
+                options={{
+                  chart: {
+                    id: "apexchart-example",
+                  },
+                  xaxis: {
+                    categories: stockGameDates.slice(
+                      0,
+                      portfolios?.length ?? 0
+                    ),
+                  },
+                }}
+              />
+            </div>
+            <div className={`flex flex-col gap-12 col-span-4 p-6 border border-gray-100/5 rounded-2xl`}>
+              <span className={`text-lg font-bold font-montserrat`}>
+                Stocks
+              </span>
+            </div>
+          </div>

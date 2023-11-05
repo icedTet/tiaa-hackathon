@@ -3,7 +3,7 @@
 import { apiDomain } from "@/constants";
 //hooks imports
 import { useState } from "react";
-import { useRef } from 'react';
+import { useRef } from "react";
 
 //react icons imports
 import { AiOutlineSend } from "react-icons/ai";
@@ -20,24 +20,24 @@ const Home: React.FC = () => {
 
   //Code for inputting and outputting using ai chatbot from backend
   const [chatRes, setChatRes] = useState(" ");
-  const sendQuery = () => {
-    let chatInputVal = chatInputRef.current.value;
-    // console.log("YOOOOOOOO:");
-    // console.log(chatInputVal);
-    getRes(chatInputVal);
-  }
-  const getRes = (inputQ: any) => {
-    //fetch the response from the chatbot
-    const res = await fetch(`${apiDomain}/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(),
-    });
-    //output the response
-    setChatRes(inputQ);
-  }
+  // const sendQuery = () => {
+  //   let chatInputVal = chatInputRef.current?.value;
+  //   // console.log("YOOOOOOOO:");
+  //   // console.log(chatInputVal);
+  //   getRes(chatInputVal);
+  // };
+  // const getRes = async (inputQ: any) => {
+  //   //fetch the response from the chatbot
+  //   const res = await fetch(`${apiDomain}/login`, {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify(),
+  //   });
+  //   //output the response
+  //   setChatRes(inputQ);
+  // };
 
   return (
     <>
@@ -85,8 +85,9 @@ const Home: React.FC = () => {
                   id="chat_input"
                   placeholder="Write a Message"
                   className="w-full pr-[10px] py-[10px] outline-0 border-0"
-                  ref={chatInputRef}/>
-                <AiOutlineSend onClick = {sendQuery}/>
+                  ref={chatInputRef}
+                />
+                {/* <AiOutlineSend onClick={sendQuery} /> */}
               </div>
             </div>
           </div>

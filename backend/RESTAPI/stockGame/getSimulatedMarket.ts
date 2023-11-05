@@ -1,4 +1,4 @@
-import { stockGameDates } from "../../dates";
+import stockGameDates  from "../../dates";
 import { RESTHandler, RESTMethods } from "../../server";
 import { StockDatabase } from "../../utils/handlers/StockDatabase";
 import { StockGame } from "../../utils/handlers/StockGame";
@@ -13,12 +13,13 @@ export const getCurrentGamePortfolio = {
       if (user?._id) {
         const gameData = await StockGame.getUserGameData(user._id);
         date = StockGame.dateToSimulationTime(gameData.currentDay);
+        console.log({current:gameData.currentDay});
       }
     }
     if (!date) {
       return res.status(400).json({ error: "Invalid time" });
     }
-    console.log(date);
+    console.log({date});
     const gameData = await StockDatabase.getInstance().getStockMarketPricesUpTo(
       date
     );

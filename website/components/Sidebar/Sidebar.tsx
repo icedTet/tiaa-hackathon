@@ -1,4 +1,5 @@
 import {
+  BanknotesIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
   CogIcon,
@@ -19,7 +20,7 @@ import { UserProfile } from "../UserProfile";
 export const Sidebar = () => {
   const user = useSelf();
   const router = useRouter();
-  const [open, setOpen] = useLocalStorage("sidebarOpen", true);
+  const [open, setOpen] = useLocalStorage("sidebarOpen", false);
   return (
     <div
       className={`${
@@ -85,9 +86,9 @@ export const Sidebar = () => {
             open={open}
           />
           <SidebarItem
-            icon={<GlobeAltIcon className={`h-6 w-6`} />}
-            text="Networking"
-            href="/settings"
+            icon={<BanknotesIcon className={`h-6 w-6`} />}
+            text="SimuStocks"
+            href="/stockgame"
             open={open}
           />
           {/* <SidebarItem
@@ -120,7 +121,7 @@ export const Sidebar = () => {
         <div
           className={`flex flex-row ${
             open ? `p-4 rounded-3xl bg-gray-850` : `p-1 rounded-xl`
-          }  border border-gray-100/10 drop-shadow-lg`}
+          }  border border-gray-100/10 drop-shadow-lg items-center`}
         >
           <UserProfile
             user={user!}

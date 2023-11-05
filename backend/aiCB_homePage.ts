@@ -37,7 +37,6 @@ const chatPrompt = ChatPromptTemplate.fromMessages([
   ["human", humanTemplate],
 ]);
 
-//const model = new ChatOpenAI({openAIApiKey:"be9bdecc8bf64e85bde69c04b2ad56f8"});
 const model = new ChatOpenAI({
   temperature: 0.9,
   azureOpenAIApiKey: "be9bdecc8bf64e85bde69c04b2ad56f8", // In Node.js defaults to process.env.AZURE_OPENAI_API_KEY

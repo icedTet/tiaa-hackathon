@@ -9,8 +9,8 @@ import { fetcher } from "../../utils/Fetcher";
 export const IncomingFriendRequest = (props: {
   request: FriendRequest;
   user: User;
-  onAccept: () => void;
-  onReject: () => void;
+  onAccept: () => Promise<void>;
+  onReject: () => Promise<void>;
 }) => {
   const { request, user, onAccept, onReject } = props;
   const [loading, setLoading] = useState(false);
@@ -20,7 +20,7 @@ export const IncomingFriendRequest = (props: {
       await fetcher(`${apiDomain}/friends/requests/${request._id}/accept`, {
         method: "POST",
       });
-      onAccept();
+     await onAccept();
     } catch (e) {}
     setLoading(false);
   };
@@ -30,7 +30,7 @@ export const IncomingFriendRequest = (props: {
       await fetcher(`${apiDomain}/friends/requests/${request._id}/reject`, {
         method: "POST",
       });
-      onReject();
+      await onReject();
     } catch (e) {}
     setLoading(false);
   };
