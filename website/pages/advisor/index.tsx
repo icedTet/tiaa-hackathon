@@ -87,7 +87,7 @@ export const AdvisorPage = () => {
                     </span> */}
                 <div className={`bg-gray-900 p-4 rounded-3xl`}>
                   <MarkdownRenderer>
-                    Hi there! I'm Clyde, your personal financial advisor. I can help you with any questions you have about your finances. Just ask me a question and I'll do my best to answer it!
+                    Hi there! I&apos;m Clyde, your personal financial advisor. I can help you with any questions you have about your finances. Just ask me a question and I&apos;ll do my best to answer it!
                   </MarkdownRenderer>
                 </div>
               </div>
