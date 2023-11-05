@@ -4,7 +4,7 @@ import { SidebarLayout } from "../../components/SidebarLayout";
 import { useAPIProp } from "../../utils/hooks/useAPI";
 import { apiDomain } from "../../constants";
 import { Modal } from "../../components/Modal";
-import { use, useMemo, useState } from "react";
+import { use, useEffect, useMemo, useState } from "react";
 import { UserProfile } from "../../components/UserProfile";
 import { FriendBook, FriendRequest, User } from "../../utils/types";
 import { FriendSearchResult } from "../../components/Friends/FriendSearchResult";
@@ -41,6 +41,12 @@ export const FriendsPage = () => {
     });
     return umap;
   }, [friendRequests?.users, friends]);
+  useEffect(() => {
+    setInterval(() => {
+      setFriendRequests();
+      setFriends()
+    }, 5000);
+  }, []);
   const [addFriend, setAddFriend] = useState(false);
   return (
     <SidebarLayout title={"Friends"}>
@@ -104,7 +110,9 @@ export const FriendsPage = () => {
           </div>
         )}
         <div className={`flex flex-col gap-4`}>
-          <span className={`text-xl font-bold font-montserrat`}>Friends ({friends?.friends.length})</span>
+          <span className={`text-xl font-bold font-montserrat`}>
+            Friends ({friends?.friends.length})
+          </span>
           <div className={`flex flex-col gap-4`}>
             {!!friends?.friends.length &&
               friends?.friends?.map((friend) => (

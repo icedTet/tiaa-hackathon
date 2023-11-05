@@ -10,6 +10,7 @@ import { Storage } from "@google-cloud/storage";
 import { User } from "./types";
 import { config } from "dotenv";
 import { getUserFromAuthHeader } from "./utils/handlers/UserManager";
+import { StockDatabase } from "./utils/handlers/StockDatabase";
 config();
 declare global {
   var MongoDB: MongoClient | null;
@@ -127,6 +128,7 @@ const importAllHandlers = async (path: string, failedImports: string[]) => {
 
 MongoConnection.connect().then((db) => {
   console.log("Established Mongo Connection...");
+  StockDatabase.getInstance().loadStocks();
   globalThis.MongoDB = db;
   db.db("Users").collection("unverifiedUser").deleteMany({});
   server.use(

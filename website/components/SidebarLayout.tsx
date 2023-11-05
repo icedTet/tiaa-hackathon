@@ -8,7 +8,7 @@ export const SidebarLayout = (props: {
   return (
     <div className={`min-h-screen bg-gray-1000 flex flex-row gap-8 relative`}>
       <Sidebar />
-      {props.children}
+      <div className={`flex flex-col gap-8 w-full overflow-auto h-screen`}>{props.children}</div>
     </div>
   );
 };
