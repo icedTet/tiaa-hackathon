@@ -97,6 +97,7 @@ export const AdvisorPage = () => {
                 <div
                   className={`flex flex-row gap-4 items-start`}
                   id={`message-${ind}`}
+                  key={ind}
                 >
                   {message._getType() === "human" ? (
                     <UserProfile className={"w-12 h-12"} user={self!} />
