@@ -94,7 +94,7 @@ export const MarkdownRenderer = (props: {
               children = recursiveStringifyNode(children[0]);
             // console.log(children)
           }
-          const [copied, setCopied] = useState(false);
+          // const [copied, setCopied] = useState(false);
           return match ? (
             //@ts-ignore
             <div className="relative p-0 overflow-hidden group shadow-md">
@@ -117,17 +117,17 @@ export const MarkdownRenderer = (props: {
                 <button
                   className={`border p-1 px-2 flex flex-row items-center border-gray-400 text-gray-600  hover:text-gray-50 hover:bg-gray-900 transition-all duration-150 font-wsans text-xs`}
                   onClick={() => {
-                    setCopied(true);
+                    // setCopied(true);
                     navigator.clipboard.writeText(
                       String(children).replace(/\n$/, "")
                     );
                     setTimeout(() => {
-                      setCopied(false);
+                      // setCopied(false);
                     }, 1000);
                   }}
                 >
                   <ClipboardIcon className={`w-5 h-5 mr-2`} />
-                  {copied ? "Copied!" : "Copy Code"}
+                  {/* {copied ? "Copied!" : "Copy Code"} */}
                 </button>
               </div>
             </div>
