@@ -2,9 +2,10 @@ import stockGameDates from "../../dates";
 import { RESTHandler, RESTMethods } from "../../server";
 import { FriendsManager } from "../../utils/handlers/FriendsManager";
 import { StockGame } from "../../utils/handlers/StockGame";
+import { UserManager } from "../../utils/handlers/UserManager";
 
 export const getCurrentGamePortfolio = {
-  path: "/stockGame/user/@friends/portfolio",
+  path: "/stockGame/user/@me/friends",
   method: RESTMethods.GET,
   sendUser: true,
   run: async (req, res, next, user) => {
@@ -25,7 +26,13 @@ export const getCurrentGamePortfolio = {
       );
       resultData[friendID] = friendData;
     }
-    res.send(resultData);
+    const users = await UserManager.getUsers(friendIDs!)
+    const userObj = {} as any;
+    users?.map((user) => (userObj[user._id!] = UserManager.cleanUser(user)));
+    res.send({
+      portfolio: resultData,
+      users: userObj,
+    });
   },
 } as RESTHandler;
 export default getCurrentGamePortfolio;

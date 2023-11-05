@@ -10,7 +10,15 @@ export class StockGame {
   }
   static simulationTimeToDate(simulationTime: string) {
     const [year, month, day] = simulationTime.split("-").map(Number);
-    return new Date(year, month - 1, day);
+    const date = new Date();
+    date.setUTCFullYear(year);
+    date.setUTCMonth(month - 1);
+    date.setUTCDate(day);
+    date.setUTCHours(0);
+    date.setUTCMinutes(0);
+    date.setUTCSeconds(0);
+    date.setUTCMilliseconds(0);
+    return date;
   }
   static async getCurrentPortfolio(userID: string) {
     const userGameData = await this.getUserGameData(userID);

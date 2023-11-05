@@ -6,11 +6,12 @@ import {
   StockGameMarketData,
   StockGameUserData,
   StockGameUserTimeStamp,
+  User,
 } from "../../utils/types";
 import { apiDomain } from "../../constants";
 import dayjs from "dayjs";
 import { useCallback, useMemo, useRef, useState } from "react";
-import stockGameDates  from "../../utils/consts/dates";
+import stockGameDates from "../../utils/consts/dates";
 import {
   ExclamationTriangleIcon,
   MagnifyingGlassIcon,
@@ -23,6 +24,7 @@ import { stockNameMap } from "../../utils/consts/stockMap";
 import { StockSearchResult } from "../../components/StockGame/StockSearchResult";
 import { fetcher } from "../../utils/Fetcher";
 import { OwnStockRender } from "../../components/StockGame/OwnStockRender";
+import { UserProfile } from "../../components/UserProfile";
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
@@ -39,14 +41,22 @@ const calculatePortfolioValue = (
 };
 export const dateToSimulationTime = (date: Date) => {
   date = new Date(date);
-  return `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(
+  return `${date.getUTCFullYear()}-${`${date.getUTCMonth() + 1}`.padStart(
     2,
     "0"
   )}-${`${date.getUTCDate()}`.padStart(2, "0")}`;
 };
 export const simulationTimeToDate = (simulationTime: string) => {
   const [year, month, day] = simulationTime.split("-").map(Number);
-  return new Date(year, month, day);
+  const date = new Date();
+  date.setUTCFullYear(year);
+  date.setUTCMonth(month - 1);
+  date.setUTCDate(day);
+  date.setUTCHours(0);
+  date.setUTCMinutes(0);
+  date.setUTCSeconds(0);
+  date.setUTCMilliseconds(0);
+  return date;
 };
 export const StockGame = () => {
   const [gameData, setGameData] = useAPIProp<StockGameUserData>({
@@ -57,6 +67,16 @@ export const StockGame = () => {
   });
   const [portfolios, setPortfolios] = useAPIProp<StockGameUserTimeStamp[]>({
     APIPath: `${apiDomain}/stockGame/user/@me/portfolios`,
+  });
+  const [friendPortfolios, setFriendPortfolios] = useAPIProp<{
+    users: {
+      [userID: string]: User;
+    };
+    portfolio: {
+      [userID: string]: StockGameUserTimeStamp;
+    };
+  }>({
+    APIPath: `${apiDomain}/stockGame/user/@me/friends`,
   });
   const currentPortfolio = useMemo(() => {
     return portfolios?.find(
@@ -202,12 +222,13 @@ export const StockGame = () => {
                   const json = await end.json();
                   if (!end.ok) {
                     setAdvanceError(json.message);
-                    setAdvancing(false);  
+                    setAdvancing(false);
                     return { success: false, message: json.message };
                   }
                   await setPortfolios();
                   await setGameData();
                   await setStockData();
+                  await setFriendPortfolios();
                   setAdvancing(false);
                   // alert(`Day advanced!`);
                   return { success: true };
@@ -324,6 +345,41 @@ export const StockGame = () => {
                     : `Loading...`}
                 </span>
               </div>
+            </div>
+            <div className={`flex flex-col gap-4 pt-8`}>
+              <span className={`text-base font-bold font-montserrat`}>
+                Friends
+              </span>
+              {Object.keys(friendPortfolios?.portfolio ?? {}).map((userID) => {
+                const portfolio = friendPortfolios?.portfolio?.[userID];
+                const user = friendPortfolios?.users?.[userID];
+                console.log({ portfolio, user });
+                if (!portfolio || !user) return null;
+                const pvalue = calculatePortfolioValue(
+                  portfolio,
+                  currentMarketData ?? {}
+                );
+                return (
+                  <div
+                    className={`flex flex-row gap-4 bg-gray-900 h-a items-center p-6 rounded-3xl hover:brightness-125 transition-all cursor-pointer border ${
+                      pvalue > portfolioValue
+                        ? `border-green-500`
+                        : `border-gray-50/10`
+                    }`}
+                    key={userID}
+                  >
+                    <UserProfile className={"w-10 h-10 text-xs"} user={user} />
+                    <div className={`flex flex-col gap-2`}>
+                      <span className={`text-xl font-bold font-montserrat`}>
+                        {user.username}
+                      </span>
+                      <span className={`text-gray-400`}>
+                        ${pvalue.toFixed(3)}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
           <div className={`flex flex-col gap-4 w-full col-span-9 grow pb-8`}>
