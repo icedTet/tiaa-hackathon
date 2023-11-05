@@ -16,6 +16,7 @@ export const StockSearchResult = (props: {
   const [processing, setProcessing] = useState(false);
   const [purchaseSuccess, setPurchaseSuccess] = useState(false);
   const [amount, setAmount] = useState(0);
+  console.log(stock);
   return (
     <>
       <Modal

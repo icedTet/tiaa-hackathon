@@ -124,6 +124,7 @@ function cleanStockData(raw: rawStock[]) {
     const stock = stocks[i];
     const stockData = await readStockData(stock);
     const { cleaned, earliestYear } = cleanStockData(stockData);
+    cleaned.shift()
     if (earliestYear >= 1984) {
       warningStocks.push(stock);
       console.warn(`Earliest year is ${earliestYear} for ${stock}, skipping`);

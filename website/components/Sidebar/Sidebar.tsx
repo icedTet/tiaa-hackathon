@@ -1,4 +1,5 @@
 import {
+  AcademicCapIcon,
   BanknotesIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -91,11 +92,12 @@ export const Sidebar = () => {
             href="/stockgame"
             open={open}
           />
-          {/* <SidebarItem
-            icon={<CogIcon className={`h-6 w-6`} />}
-            text="Settings"
-            href="/settings"
-          /> */}
+          <SidebarItem
+            icon={<AcademicCapIcon className={`h-6 w-6`} />}
+            text="Advisor"
+            href="/advisor"
+            open={open}
+          />
         </div>
 
         {/* <div className={`flex flex-col gap-0`}>
@@ -129,7 +131,11 @@ export const Sidebar = () => {
               open ? `w-12 h-12` : `w-8 h-8 text-sm`
             } rounded-2xl transition-all duration-300`}
           />
-          <div className={`flex flex-col justify-evenly ${!open ? `w-0 h-0 opacity-0`: ` pl-4 opacity-100 ` } whitespace-nowrap transition-all`}>
+          <div
+            className={`flex flex-col justify-evenly ${
+              !open ? `w-0 h-0 opacity-0` : ` pl-4 opacity-100 `
+            } whitespace-nowrap transition-all`}
+          >
             <span className={` text-base font-bold text-gray-100`}>
               {user?.firstName} {user?.lastName}
             </span>

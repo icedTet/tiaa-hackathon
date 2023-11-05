@@ -56,7 +56,7 @@ export default function Home() {
     setError("");
     localStorage.setItem("token", json.token);
     setLoggingIn(false);
-    router.push("/pingy");
+    router.push("/dashboard");
   };
   useEffect(() => {
     setError("");
@@ -95,6 +95,7 @@ export default function Home() {
                 </span> */}
                   <div
                     className={`flex flex-row gap-4 p-4 border rounded-2xl items-center border-gray-100/20 drop-shadow-md shadow-xl bg-gray-850 w-full cursor-pointer hover:bg-gray-800 transition-all`}
+                    onClick={() => router.push("/dashboard")}
                   >
                     <UserProfile user={self} className="w-10 h-10 text-xs" />
                     <div className={`flex flex-col gap-0`}>
