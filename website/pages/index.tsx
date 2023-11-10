@@ -35,13 +35,13 @@ const Home: React.FC = () => {
     setChatResFlag(false);
     setChatRes("");
     let chatInput = chatInputRef.current
-    let chatInputVal = chatInput.value;
-    // console.log("YOOOOOOOO:");
-    // console.log(chatInputVal);
-    getRes(chatInputVal)
-    .then(() => {
-      chatInput.value = "";
-    });
+    // let chatInputVal = chatInput.value;
+    // // console.log("YOOOOOOOO:");
+    // // console.log(chatInputVal);
+    // getRes(chatInputVal)
+    // .then(() => {
+    //   chatInput.value = "";
+    // });
   }
   const getRes = async (inputQ: any) => {
     //fetch the response from the chatbot

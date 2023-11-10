@@ -2268,10 +2268,10 @@ kind-of@^3.0.2:
   dependencies:
     is-buffer "^1.1.5"
 
-langchain@^0.0.180:
-  version "0.0.180"
-  resolved "https://registry.yarnpkg.com/langchain/-/langchain-0.0.180.tgz#8b43fb39b48fad1f606e9532044bde5b70802f62"
-  integrity sha512-/70mZsBAUcGZHiHTEs0pO1+xyVwj4X1FMl2LmTuBv83/+yNYkAJJg5+rLI9u6Obj7ZcsoNmqIPpsOL5rx2yJww==
+langchain@^0.0.184:
+  version "0.0.184"
+  resolved "https://registry.yarnpkg.com/langchain/-/langchain-0.0.184.tgz#0bfb7ae0577940e70c8a12f419e6ae0c415e3a6e"
+  integrity sha512-/v0zl1yGeivGRaPXKr9AuIxV/Yt2Muc8UWxCk3Z4GzC5A/T5/0uOAgd6/ingcg3XoSF9fjupoSn1/UNarKUH7g==
   dependencies:
     "@anthropic-ai/sdk" "^0.6.2"
     ansi-styles "^5.0.0"
@@ -2284,10 +2284,9 @@ langchain@^0.0.180:
     js-yaml "^4.1.0"
     jsonpointer "^5.0.1"
     langchainhub "~0.0.6"
-    langsmith "~0.0.31"
+    langsmith "~0.0.48"
     ml-distance "^4.0.0"
-    object-hash "^3.0.0"
-    openai "~4.4.0"
+    openai "^4.16.1"
     openapi-types "^12.1.3"
     p-queue "^6.6.2"
     p-retry "4"
@@ -2301,7 +2300,7 @@ langchainhub@~0.0.6:
   resolved "https://registry.yarnpkg.com/langchainhub/-/langchainhub-0.0.6.tgz#9d2d06e4ce0807b4e8a31e19611f57aef990b54d"
   integrity sha512-SW6105T+YP1cTe0yMf//7kyshCgvCTyFBMTgH2H3s9rTAR4e+78DA/BBrUL/Mt4Q5eMWui7iGuAYb3pgGsdQ9w==
 
-langsmith@~0.0.31:
+langsmith@~0.0.48:
   version "0.0.48"
   resolved "https://registry.yarnpkg.com/langsmith/-/langsmith-0.0.48.tgz#3a9a8ce257271ddb43d01ebf585c4370a3a3ba79"
   integrity sha512-s0hW8iZ90Q9XLTnDK0Pgee245URV3b1cXQjPDj5OKm1+KN7iSK1pKx+4CO7RcFLz58Ixe7Mt+mVcomYqUuryxQ==
@@ -2673,10 +2672,10 @@ onetime@^5.1.0, onetime@^5.1.2:
   dependencies:
     mimic-fn "^2.1.0"
 
-openai@~4.4.0:
-  version "4.4.0"
-  resolved "https://registry.yarnpkg.com/openai/-/openai-4.4.0.tgz#dbaab326eb044ddec479951b245850c482678031"
-  integrity sha512-JN0t628Kh95T0IrXl0HdBqnlJg+4Vq0Bnh55tio+dfCnyzHvMLiWyCM9m726MAJD2YkDU4/8RQB6rNbEq9ct2w==
+openai@^4.16.1:
+  version "4.17.3"
+  resolved "https://registry.yarnpkg.com/openai/-/openai-4.17.3.tgz#c07948a4ffda2883643f31f769cabc77c26ec15f"
+  integrity sha512-Gx9wzl9HWX5pjagkgXVu6U2BTFEPkQFdkppNnAX2n2Rpjtn2zt152wXh7NnZ5eJuVxUGYzRe66JmayAEGjzqAg==
   dependencies:
     "@types/node" "^18.11.18"
     "@types/node-fetch" "^2.6.4"
@@ -2686,6 +2685,7 @@ openai@~4.4.0:
     form-data-encoder "1.7.2"
     formdata-node "^4.3.2"
     node-fetch "^2.6.7"
+    web-streams-polyfill "^3.2.1"
 
 openapi-types@^12.1.3:
   version "12.1.3"

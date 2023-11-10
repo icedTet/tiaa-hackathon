@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "csv-reader": "^1.0.12"
+    "csv-reader": "^1.0.12",
+    "socket.io": "^4.7.2"
   }
 }

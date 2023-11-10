@@ -42,7 +42,7 @@ export class AIQuestionsHelper {
       ["human", this.humanTemplate],
     ]);
 
-    const chain = chatPrompt.pipe(this.model).pipe(this.parser);
+    const chain = chatPrompt.pipe(this.model).pipe(this.parser).stream();
     const result = await chain.invoke({
       text: question,
     });

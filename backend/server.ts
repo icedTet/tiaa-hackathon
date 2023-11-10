@@ -11,11 +11,13 @@ import { User } from "./types";
 import { config } from "dotenv";
 import { getUserFromAuthHeader } from "./utils/handlers/UserManager";
 import { StockDatabase } from "./utils/handlers/StockDatabase";
+import { Server, Socket } from "socket.io";
 config();
 declare global {
   var MongoDB: MongoClient | null;
   var MailTransporter: nodemailer.Transporter | null;
   var storage: Storage;
+  var Socketeer: Map<string, Socket>;
 }
 export interface RESTHandler {
   path: string;
@@ -28,6 +30,7 @@ export interface RESTHandler {
     user?: User
   ) => void | Promise<void> | any | Promise<any>;
 }
+globalThis.Socketeer = new Map();
 export enum RESTMethods {
   GET = "get",
   POST = "post",
@@ -147,8 +150,8 @@ MongoConnection.connect().then((db) => {
       failedImports
     );
   });
+  let socketServer = null as Server | null;
   //Import all REST Endpoints
-
   if (process.env.KEY_PATH && process.env.CERT_PATH) {
     const httpsServer = https.createServer(
       {
@@ -160,19 +163,48 @@ MongoConnection.connect().then((db) => {
       server
     );
     // new SocketServer(
-    httpsServer.listen(~~(process.env.SERVER_PORT || 443), () => {
-      console.log(
-        `Secure HTTP Server started on port ${process.env.SERVER_PORT}`
-      );
-    });
+
+    socketServer = new Server(
+      httpsServer.listen(~~(process.env.SERVER_PORT || 443), () => {
+        console.log(
+          `Secure HTTP Server started on port ${process.env.SERVER_PORT}`
+        );
+      }),
+      {
+        cors: {
+          origin: "*",
+          methods: ["GET", "POST"],
+        },
+      }
+    );
     // );
   } else {
     console.log(
       `HTTP Server running on port ${~~(process.env.SERVER_PORT || 80)}`
     );
-    server.listen(~~(process.env.SERVER_PORT || 80));
+
+    socketServer = new Server(
+      server.listen(~~(process.env.SERVER_PORT || 80)),
+      {
+        cors: {
+          origin: "*",
+          methods: ["GET", "POST"],
+        },
+      }
+    );
     // const SocketAPI = new SocketServer(server.listen(env.port));
   }
+  socketServer.on("connection", (socket) => {
+    if (socket.handshake.headers.authorization) {
+      globalThis.Socketeer.set(
+        socket.handshake.headers.authorization as string,
+        socket
+      );
+      socket.once("disconnect", () => {
+        globalThis.Socketeer.delete(socket.handshake.headers.authorization as string);
+      });
+    }
+  });
 });
 process.on("unhandledRejection", (reason, p) => {
   console.trace("Unhandled Rejection at: Promise", p, "reason:", reason);
